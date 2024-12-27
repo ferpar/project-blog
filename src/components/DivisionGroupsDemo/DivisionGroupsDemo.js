@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { LayoutGroup, motion } from 'framer-motion'
 import clsx from 'clsx';
 
 import { range } from '@/utils';
@@ -55,23 +56,26 @@ function DivisionGroupsDemo({
       </header>
 
       <div className={styles.demoWrapper}>
+        <LayoutGroup>
         <div
           className={clsx(styles.demoArea)}
           style={gridStructure}
         >
           {range(numOfGroups).map((groupIndex) => (
-            <div key={groupIndex} className={styles.group}>
-              {range(numOfItemsPerGroup).map((index) => {
+            <motion key={groupIndex} className={styles.group}>
+              {range(numOfItemsPerGroup * groupIndex, numOfItemsPerGroup * (groupIndex + 1)).map((index) => {
                 return (
-                  <div
-                    key={index}
+                  <motion.div
+                    key={`item-${index}`}
+                    layoutId={`item-${index}`}
                     className={styles.item}
                   />
                 );
               })}
-            </div>
+            </motion>
           ))}
         </div>
+        </LayoutGroup>
       </div>
 
       {includeRemainderArea && (
