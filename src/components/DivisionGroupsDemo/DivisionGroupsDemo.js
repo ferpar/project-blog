@@ -15,6 +15,7 @@ function DivisionGroupsDemo({
   initialNumOfGroups = 1,
   includeRemainderArea,
 }) {
+  const elemId = React.useId();
   const [numOfGroups, setNumOfGroups] = React.useState(initialNumOfGroups);
 
   const numOfItemsPerGroup = Math.floor(numOfItems / numOfGroups);
@@ -47,8 +48,8 @@ function DivisionGroupsDemo({
         />
       </header>
 
-      <div className={styles.demoWrapper}>
-        <LayoutGroup>
+      <LayoutGroup>
+        <div className={styles.demoWrapper}>
           <div className={clsx(styles.demoArea)} style={gridStructure}>
             {range(numOfGroups).map((groupIndex) => (
               <motion key={groupIndex} className={styles.group}>
@@ -58,8 +59,8 @@ function DivisionGroupsDemo({
                 ).map((index) => {
                   return (
                     <motion.div
-                      key={`item-${index}`}
-                      layoutId={`item-${index}`}
+                      key={`item-${index}-${elemId}`}
+                      layoutId={`item-${index}-${elemId}`}
                       className={styles.item}
                     />
                   );
@@ -67,18 +68,24 @@ function DivisionGroupsDemo({
               </motion>
             ))}
           </div>
-        </LayoutGroup>
-      </div>
-
-      {includeRemainderArea && (
-        <div className={styles.remainderArea}>
-          <p className={styles.remainderHeading}>Remainder Area</p>
-
-          {range(remainder).map((index) => {
-            return <div key={index} className={styles.item} />;
-          })}
         </div>
-      )}
+
+        {includeRemainderArea && (
+          <div className={styles.remainderArea} style={{flexDirection: "row-reverse"}}>
+            <p className={styles.remainderHeading}>Remainder Area</p>
+
+            {range(numOfItems - remainder, numOfItems).map((index) => {
+              return (
+                <motion.div
+                  key={`item-${index}-${elemId}`}
+                  layoutId={`item-${index}-${elemId}`}
+                  className={styles.item}
+                />
+              );
+            })}
+          </div>
+        )}
+      </LayoutGroup>
 
       <Equation
         dividend={numOfItems}
